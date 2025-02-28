@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-/// <summary>
-/// 所有UI的基类
-/// </summary>
-public abstract class BasePanel
-{
-    public UIType UIType { get; private set; }
 
-    public BasePanel(UIType uIType)
+public class BasePanel
+{
+    public UIType uiType { get; private set; }
+    public GameObject activeObject;
+
+    protected BasePanel(UIType uIType)
     {
-        UIType = uIType;
+        uiType = uIType;
     }
+
     public virtual void OnEnter() { }
-    public virtual void OnPause() { }
-    public virtual void OnResume() { }
+    public virtual void OnEnable() { }
+    public virtual void OnDisable() { }
     public virtual void OnExit() { }
 }
