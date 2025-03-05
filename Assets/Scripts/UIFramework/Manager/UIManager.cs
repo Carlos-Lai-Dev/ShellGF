@@ -30,10 +30,10 @@ public class UIManager
         ui_Dic[type] = ui;
         return ui;
     }
-    public void PushPanel(BasePanel panel)
+    public void OpenPanel(BasePanel panel)
     {
 #if UNITY_EDITOR
-        Debug.Log($"{panel.uiType.Name} Push Stack !");
+        Debug.Log($"{panel.uiType.Name} Open !");
 #endif
         if (ui_Stack.Count > 0) ui_Stack.Peek().OnDisable();
 
@@ -47,7 +47,7 @@ public class UIManager
       
         panel.OnEnable();
     }
-    public void PopPanel(bool isEmpty = false)
+    public void ClosePanel(bool isEmpty = false)
     {
 
         if (ui_Stack.Count > 0)
@@ -55,7 +55,7 @@ public class UIManager
             ui_Stack.Peek().OnDisable();
             ui_Stack.Peek().OnExit();
 #if UNITY_EDITOR
-            Debug.Log($"{ui_Stack.Peek().uiType.Name} Pop Stack !");
+            Debug.Log($"{ui_Stack.Peek().uiType.Name} Close !");
 #endif
             GameObject.Destroy(ui_Dic[ui_Stack.Peek().uiType]);
             ui_Dic.Remove(ui_Stack.Peek().uiType);
@@ -63,7 +63,7 @@ public class UIManager
 
             if (isEmpty)
             {
-                PopPanel(isEmpty);
+                ClosePanel(isEmpty);
             }
             else if (ui_Stack.Count > 0)
             {

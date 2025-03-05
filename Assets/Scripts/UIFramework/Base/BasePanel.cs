@@ -2,12 +2,17 @@ using UnityEngine;
 public enum PanelName
 {
     StartPanel,
-    SettingPanel,
+    SettingsPanel,
+    GamePanel,
+    LoadingPanel,
 }
 public enum BtnName
 { 
     StartBtn,
-    SettingBtn,
+    OptionsBtn,
+    QuitBtn,
+    BackBtn,
+    CloseBtn,
 }
 public class BasePanel
 {

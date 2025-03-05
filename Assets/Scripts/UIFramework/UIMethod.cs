@@ -68,6 +68,16 @@ public class UIMethod
         return null;
     }
 
+    public T GetOrAddComponentInChildren<T>(Transform parent, BtnName childName) where T : Component
+    {
+        var go = FindObjectInChildren(parent, childName.ToString());
+        if (go)
+        {
+            if (go.GetComponent<T>() == null) go.AddComponent<T>();
+            return go.GetComponent<T>();
+        }
+        return null;
+    }
     public T GetOrAddComponentInChildren<T>(Transform parent, string childName) where T : Component
     {
         var go = FindObjectInChildren(parent, childName);
