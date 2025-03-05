@@ -7,14 +7,14 @@ using UnityEngine.SceneManagement;
 public class SceneController
 {
     private static SceneController instance;
-    private Dictionary<string, SceneBase> scene_Dic;
+    private readonly Dictionary<string, SceneBase> scene_Dic;
     private static Action onLoaderCallback;
     private static AsyncOperation asyncOperation;
-    public static SceneController GetInstance() => instance != null ? instance : null;
+    public static SceneController GetInstance() => instance ?? null;
     private class LoadingMono : MonoBehaviour { }
     public SceneController()
     {
-        if (instance == null) instance = this;
+        instance ??= this;
         scene_Dic = new Dictionary<string, SceneBase>();
     }
 
@@ -46,14 +46,7 @@ public class SceneController
         yield return new WaitUntil(() => asyncOperation.progress >= 0.9f);
         asyncOperation.allowSceneActivation = true;
     }
-    public static float GetLoadingProgress()
-    {
-        if (asyncOperation != null)
-        {
-            return asyncOperation.progress;
-        }
-        return 0f;
-    }
+    public static float GetLoadingProgress() => asyncOperation != null ? asyncOperation.progress : 0f;
     public static void LoaderCallback()
     {
         if (onLoaderCallback != null)

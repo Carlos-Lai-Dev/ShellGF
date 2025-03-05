@@ -5,13 +5,13 @@ public class UIManager
 {
     private Transform parent;
     private static UIManager instance;
-    public static UIManager GetInstance() => instance != null ? instance : null;
+    public static UIManager GetInstance() => instance ?? null;
 
-    private Stack<BasePanel> ui_Stack;
-    private Dictionary<UIType, GameObject> ui_Dic;
+    private readonly Stack<BasePanel> ui_Stack;
+    private readonly Dictionary<UIType, GameObject> ui_Dic;
     public UIManager()
     {
-        if (instance == null) instance = this;
+        instance ??= this;
         ui_Stack = new Stack<BasePanel>();
         ui_Dic = new Dictionary<UIType, GameObject>();
         FindCanvas();
