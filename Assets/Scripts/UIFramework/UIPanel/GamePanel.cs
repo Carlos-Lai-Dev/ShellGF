@@ -13,6 +13,7 @@ public class GamePanel : BasePanel
         base.OnEnter();
         backBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.BackBtn);
         backBtn.onClick.AddListener(BackToStart);
+        backBtn.AddButtonSounds();
     }
 
     private void BackToStart()
@@ -31,6 +32,6 @@ public class GamePanel : BasePanel
     public override void OnExit()
     {
         base.OnExit();
-        backBtn.onClick.RemoveListener(BackToStart);
+        backBtn.onClick.RemoveAllListeners();
     }
 }

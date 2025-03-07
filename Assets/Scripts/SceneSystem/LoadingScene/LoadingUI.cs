@@ -10,9 +10,9 @@ public class LoadingUI : MonoBehaviour
     private void Start()
     {
         SceneController.LoaderCallback();
-        StartCoroutine(nameof(SliderBuffer));
+        StartCoroutine(nameof(SliderFill));
     }
-    IEnumerator SliderBuffer()
+    IEnumerator SliderFill()
     {
         float t = 0;
         while (progressSlider.value < progressSlider.maxValue)

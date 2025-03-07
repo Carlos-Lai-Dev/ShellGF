@@ -17,6 +17,7 @@ public class GameRoot : MonoBehaviour
         new UIManager();
         //SceneController_GR =
         new SceneController();
+        SoundManager.Init();
     }
 
     private void Start()

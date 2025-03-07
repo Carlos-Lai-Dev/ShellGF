@@ -16,6 +16,9 @@ public class StartPanel : BasePanel
         startBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.StartBtn);
         optionsBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.OptionsBtn);
         quitBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.QuitBtn);
+        startBtn.AddButtonSounds();
+        optionsBtn.AddButtonSounds();
+        quitBtn.AddButtonSounds();
         startBtn.onClick.AddListener(LoadGame);
         optionsBtn.onClick.AddListener(OpenSettingsPanel);
         quitBtn.onClick.AddListener(QuitGame);
@@ -32,9 +35,9 @@ public class StartPanel : BasePanel
     public override void OnExit()
     {
         base.OnExit();
-        startBtn.onClick.RemoveListener(LoadGame);
-        optionsBtn.onClick.RemoveListener(OpenSettingsPanel);
-        quitBtn.onClick.RemoveListener(QuitGame);
+        startBtn.onClick.RemoveAllListeners();
+        optionsBtn.onClick.RemoveAllListeners();
+        quitBtn.onClick.RemoveAllListeners();
     }
     private void LoadGame()
     {
