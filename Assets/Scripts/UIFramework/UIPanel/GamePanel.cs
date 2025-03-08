@@ -11,9 +11,8 @@ public class GamePanel : BasePanel
     public override void OnEnter()
     {
         base.OnEnter();
-        backBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.BackBtn);
-        backBtn.onClick.AddListener(BackToStart);
-        backBtn.AddButtonSounds();
+        backBtn = activeObject.GetOrAddComponentInChildren<Button>(BtnName.BackBtn);
+        backBtn.onClick.AddListenerWithSound(BackToStart);
     }
 
     private void BackToStart()

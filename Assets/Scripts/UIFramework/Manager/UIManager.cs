@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class UIManager
 {
@@ -16,12 +19,49 @@ public class UIManager
         ui_Dic = new Dictionary<UIType, GameObject>();
         FindCanvas();
     }
+    private Transform CreateCanvas()
+    {
+        GameObject go = new GameObject("Canvas");
+        var canvas = go.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        go.AddComponent<GraphicRaycaster>();
+        var canvasScaler = go.AddComponent<CanvasScaler>();
+        canvasScaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+
+#if UNITY_STANDALONE_WIN
+        canvasScaler.referenceResolution = new Vector2(1920f, 1080f);
+#elif UNITY_ANDROID
+        if (Screen.orientation == ScreenOrientation.Landscape)
+            canvasScaler.referenceResolution = new Vector2(2400, 1080);
+        else if (Screen.orientation == ScreenOrientation.Portrait)
+            canvasScaler.referenceResolution = new Vector2(1080, 2400);
+#endif
+
+        canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        canvasScaler.matchWidthOrHeight = 0.5f;
+        GameObject eventSystem = new GameObject("EventSystem");
+        eventSystem.AddComponent<EventSystem>();
+        eventSystem.AddComponent<StandaloneInputModule>();
+        return go.transform;
+    }
 
     private void FindCanvas()
     {
-        UIMethod.GetInstance().FindCanvas(ref parent);
+        try
+        {
+            if (parent == null) parent = GameObject.Find("Canvas").transform;
+        }
+        catch (Exception e)
+        {
+#if UNITY_EDITOR
+            Debug.LogWarning(e);
+#endif
+        }
+
+        if (parent == null) parent = CreateCanvas();
     }
-    public GameObject GetSingleObject(UIType type)
+   
+    private GameObject GetSingleObject(UIType type)
     {
         if (ui_Dic.ContainsKey(type)) return ui_Dic[type];
         if (parent == null) FindCanvas();

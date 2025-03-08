@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
+using static UnityEngine.UI.Button;
 
 public enum SoundName
 {
@@ -17,8 +19,8 @@ public enum SoundName
 public static class SoundManager
 {
     private static GameObject oneShot_GO;
-    private static GameObject BGM_GO;
     private static AudioSource oneShot_AS;
+    private static GameObject BGM_GO;
     private static AudioSource BGM_AS;
     private static GameObject soundPrefab;
     private readonly static float min_Volume = 0.9f;
@@ -165,15 +167,6 @@ public static class SoundManager
 #endif
         return null;
     }
-    public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
-    {
-        T component = gameObject.GetComponent<T>();
-        if (component == null)
-            component = gameObject.AddComponent<T>();
-        return component;
-    }
-    public static void AddButtonSounds(this Button button)
-    {
-        button.onClick.AddListener(() => { PlaySound(SoundName.BtnClick); });
-    }
+   
+    
 }

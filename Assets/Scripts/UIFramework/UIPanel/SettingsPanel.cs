@@ -11,9 +11,8 @@ public class SettingsPanel : BasePanel
     public override void OnEnter()
     {
         base.OnEnter();
-        closeBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.CloseBtn);
-        closeBtn.AddButtonSounds();
-        closeBtn.onClick.AddListener(CloseSettingsPanel);
+        closeBtn = activeObject.GetOrAddComponentInChildren<Button>(BtnName.CloseBtn);
+        closeBtn.onClick.AddListenerWithSound(CloseSettingsPanel);
     }
     public override void OnEnable()
     {

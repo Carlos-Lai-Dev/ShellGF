@@ -19,14 +19,13 @@ public class BasePanel
     public UIType uiType { get; private set; }
     protected readonly static string resource = "Prefabs/UI/Panel/";
     public GameObject activeObject;
-    public Transform activeTransform => activeObject.transform;
     protected BasePanel(UIType uIType)
     {
         uiType = uIType;
     }
     private void PanelIsEnable(bool isEnable)
     {
-        UIMethod.GetInstance().GetOrAddComponent<CanvasGroup>(activeTransform).interactable = isEnable;
+        activeObject.GetOrAddComponent<CanvasGroup>().interactable = isEnable;
     }
     public virtual void OnEnter() { }
     public virtual void OnEnable() 

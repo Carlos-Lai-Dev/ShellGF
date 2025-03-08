@@ -9,15 +9,22 @@ public class GameRoot : MonoBehaviour
     private void Awake()
     {
         if (instance == null)
-            instance = this;
-        else
-            Destroy(gameObject);
+        {
 
+            instance = this;
+            new UIManager();
+            new SceneController();
+            SoundManager.Init();
+        }
+        else
+        {
+#if UNITY_EDITOR
+            Debug.Log("Destroy GameRoot !");
+#endif
+            Destroy(gameObject);
+        }
         //UIManager_GR =
-        new UIManager();
         //SceneController_GR =
-        new SceneController();
-        SoundManager.Init();
     }
 
     private void Start()

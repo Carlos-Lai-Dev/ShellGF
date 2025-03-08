@@ -14,10 +14,6 @@ public class GameAssets : MonoBehaviour
         public AudioData[] audioData;
     }
 
-    private void Awake()
-    {
-        instance ??= this;
-    }
     private void Start()
     {
         DontDestroyOnLoad(gameObject);

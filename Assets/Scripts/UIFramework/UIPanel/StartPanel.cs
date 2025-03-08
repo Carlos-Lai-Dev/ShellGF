@@ -9,19 +9,16 @@ public class StartPanel : BasePanel
     public StartPanel() : base(new UIType(path))
     {
     }
-    
+
     public override void OnEnter()
     {
         base.OnEnter();
-        startBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.StartBtn);
-        optionsBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.OptionsBtn);
-        quitBtn = UIMethod.GetInstance().GetOrAddComponentInChildren<Button>(activeTransform, BtnName.QuitBtn);
-        startBtn.AddButtonSounds();
-        optionsBtn.AddButtonSounds();
-        quitBtn.AddButtonSounds();
-        startBtn.onClick.AddListener(LoadGame);
-        optionsBtn.onClick.AddListener(OpenSettingsPanel);
-        quitBtn.onClick.AddListener(QuitGame);
+        startBtn = activeObject.GetOrAddComponentInChildren<Button>(BtnName.StartBtn);
+        optionsBtn = activeObject.GetOrAddComponentInChildren<Button>(BtnName.OptionsBtn);
+        quitBtn = activeObject.GetOrAddComponentInChildren<Button>(BtnName.QuitBtn);
+        startBtn.onClick.AddListenerWithSound(LoadGame);
+        optionsBtn.onClick.AddListenerWithSound(OpenSettingsPanel);
+        quitBtn.onClick.AddListenerWithSound(QuitGame);
     }
     public override void OnEnable()
     {
