@@ -317,6 +317,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4539008870715188887, guid: ef2adfda251cefd4991fa2cc8563dcfe, type: 3}
+      propertyPath: m_BlockingMask.m_Bits
+      value: 55
+      objectReference: {fileID: 0}
     - target: {fileID: 4539008870715188888, guid: ef2adfda251cefd4991fa2cc8563dcfe, type: 3}
       propertyPath: m_Pivot.x
       value: 0
