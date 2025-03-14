@@ -1,20 +1,14 @@
 using UnityEngine;
 
-public class GameRoot : MonoBehaviour
+public class GameRoot : SingletonMono<GameRoot>
 {
-    private static GameRoot instance;
-    //public UIManager UIManager_GR { get; private set; }
-    //public SceneController SceneController_GR { get; private set; }
-    public static GameRoot GetInstance() => instance ?? null;
     private void Awake()
     {
         if (instance == null)
         {
-
             instance = this;
-            new UIManager();
-            new SceneController();
-            SoundManager.Init();
+            Init();
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -23,13 +17,14 @@ public class GameRoot : MonoBehaviour
 #endif
             Destroy(gameObject);
         }
-        //UIManager_GR =
-        //SceneController_GR =
-    }
 
+    }
+    private void Init()
+    {
+        SoundManager.Init();
+    }
     private void Start()
     {
-        DontDestroyOnLoad(gameObject);
         UIManager.GetInstance().OpenPanel(new StartPanel());
     }
 }

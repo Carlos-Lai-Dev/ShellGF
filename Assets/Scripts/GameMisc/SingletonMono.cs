@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SingletonMono<T> : MonoBehaviour where T : Component
 {
-    private static T instance;
+    protected static T instance;
     public static T GetInstance() => Instance;
     private static T Instance
     {
@@ -22,6 +22,5 @@ public class SingletonMono<T> : MonoBehaviour where T : Component
         }
 
     }
-
-
+   
 }

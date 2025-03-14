@@ -2,7 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
+enum ABStatus
+{
+    Completed,
+    Loading,
+    NotLoaded,
+}
 public class ABManager : SingletonMono<ABManager>
 {
     private static readonly string basePath = Application.streamingAssetsPath + '/';
@@ -15,7 +22,6 @@ public class ABManager : SingletonMono<ABManager>
              "Windows";
 #endif
     private AssetBundleManifest manifest;
-    private enum ABStatus { Completed, Loading, NotLoaded, }
     private readonly Dictionary<string, AssetBundle> assetBundle_Dic = new Dictionary<string, AssetBundle>();
     private readonly Dictionary<string, ABStatus> loadStatus_Dic = new Dictionary<string, ABStatus>();
 
@@ -41,7 +47,7 @@ public class ABManager : SingletonMono<ABManager>
         AssetBundle.UnloadAllAssetBundles(unLoadAllLoadedObjects);
     }
 
-    private ABStatus CheckStatus(string abName) => loadStatus_Dic.TryGetValue(abName, out ABStatus value) ? value : ABStatus.NotLoaded;
+    private ABStatus GetStatus(string abName) => loadStatus_Dic.TryGetValue(abName, out ABStatus value) ? value : ABStatus.NotLoaded;
     private void SetStatus(string abName, ABStatus status) => loadStatus_Dic[abName] = status;
 
     private void LoadAssetBundle(string abName)
@@ -51,8 +57,8 @@ public class ABManager : SingletonMono<ABManager>
         for (; load_Queue.Count > 0; load_Queue.Dequeue())
         {
             string name = load_Queue.Peek();
-            if (CheckStatus(name) == ABStatus.Completed) continue;
-            if (CheckStatus(name) == ABStatus.Loading) UnLoad(name);
+            if (GetStatus(name) == ABStatus.Completed) continue;
+            if (GetStatus(name) == ABStatus.Loading) UnLoad(name);
 
             assetBundle_Dic[name] = AssetBundle.LoadFromFile(basePath + name);
 #if UNITY_EDITOR
@@ -73,7 +79,7 @@ public class ABManager : SingletonMono<ABManager>
 
     public T LoadRes<T>(string abName, string resName) where T : UnityEngine.Object
     {
-        if (CheckStatus(abName) != ABStatus.Completed) LoadAssetBundle(abName);
+        if (GetStatus(abName) != ABStatus.Completed) LoadAssetBundle(abName);
         T res = assetBundle_Dic[abName].LoadAsset<T>(resName);
 #if UNITY_EDITOR
         if (res == null)
@@ -86,48 +92,65 @@ public class ABManager : SingletonMono<ABManager>
 
     private IEnumerator LoadAssetBundleAsync(string abName)
     {
-        HashSet<string> visitedBundle_Hash = new HashSet<string>() { abName };
+        HashSet<string> bundle_HashSet = new HashSet<string>() { abName };
         Stack<(string, bool)> load_Stack = new Stack<(string, bool)>();
         load_Stack.Push((abName, true));
         while (load_Stack.Count > 0)
         {
             var (name, needAddDepends) = load_Stack.Peek();
-            if (CheckStatus(name) == ABStatus.Completed)
-            { 
+            if (GetStatus(name) == ABStatus.Completed)
+            {
                 load_Stack.Pop();
                 continue;
             }
 
-            if (CheckStatus(name) == ABStatus.Loading)
-            { 
+            if (GetStatus(name) == ABStatus.Loading)
+            {
                 yield return null;
                 continue;
             }
 
-            if(needAddDepends)
+            if (needAddDepends)
             {
                 load_Stack.Pop();
                 load_Stack.Push((name, false));
-                foreach(var depend in manifest.GetAllDependencies(name))
+                foreach (var depend in manifest.GetAllDependencies(name))
                 {
-                    if (visitedBundle_Hash.Add(depend))
+                    if (bundle_HashSet.Add(depend))
                     {
-                        load_Stack.Push((depend, true));   
+                        load_Stack.Push((depend, true));
                     }
                 }
                 continue;
             }
             AssetBundleCreateRequest bundleCreateRequest = AssetBundle.LoadFromFileAsync(basePath + name);
+            SetStatus(name, ABStatus.Loading);
+            yield return bundleCreateRequest;
             assetBundle_Dic[name] = bundleCreateRequest.assetBundle;
-            SetStatus(name,ABStatus.Loading);
 #if UNITY_EDITOR
-            if(assetBundle_Dic[name] == null)
+            if (assetBundle_Dic[name] == null)
             {
                 throw new ArgumentException($"AssetBundle '{name}' Load fail !");
             }
 #endif
-            yield return bundleCreateRequest;
-            SetStatus(name, ABStatus.Completed);    
+            SetStatus(name, ABStatus.Completed);
         }
     }
+
+    private IEnumerator LoadResourcesAsync<T>(string abName, string resName, UnityAction<T> callBack = null) where T : UnityEngine.Object
+    {
+        if (GetStatus(abName) != ABStatus.Completed) yield return StartCoroutine(LoadAssetBundleAsync(abName));
+        AssetBundleRequest bundleRequest = assetBundle_Dic[abName].LoadAssetAsync<T>(resName);
+        yield return bundleRequest;
+        T res = bundleRequest.asset as T;
+#if UNITY_EDITOR
+        if (res == null) throw new ArgumentException($"In AssetBundle '{abName}' Can't found '{resName}'");
+#endif
+        callBack?.Invoke(res);
+    }
+    public void LoadResAsync<T>(string abName, string resName, UnityAction<T> callBack = null) where T : UnityEngine.Object
+    {
+        StartCoroutine(LoadResourcesAsync<T>(abName, resName, callBack));
+    }
+
 }

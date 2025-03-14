@@ -1,6 +1,6 @@
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -8,13 +8,12 @@ public class UIManager
 {
     private Transform parent;
     private static UIManager instance;
-    public static UIManager GetInstance() => instance ?? null;
+    public static UIManager GetInstance() => instance = instance != null ? instance : new UIManager();
 
     private readonly Stack<BasePanel> ui_Stack;
     private readonly Dictionary<UIType, GameObject> ui_Dic;
-    public UIManager()
+    private UIManager()
     {
-        instance ??= this;
         ui_Stack = new Stack<BasePanel>();
         ui_Dic = new Dictionary<UIType, GameObject>();
         FindCanvas();
@@ -60,7 +59,7 @@ public class UIManager
 
         if (parent == null) parent = CreateCanvas();
     }
-   
+
     private GameObject GetSingleObject(UIType type)
     {
         if (ui_Dic.ContainsKey(type)) return ui_Dic[type];
@@ -84,7 +83,7 @@ public class UIManager
             ui_Stack.Push(panel);
             panel.OnEnter();
         }
-      
+
         panel.OnEnable();
     }
     public void ClosePanel(bool isEmpty = false)
