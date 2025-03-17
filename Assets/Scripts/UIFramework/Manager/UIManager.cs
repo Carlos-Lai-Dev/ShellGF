@@ -64,8 +64,8 @@ public class UIManager
     {
         if (ui_Dic.ContainsKey(type)) return ui_Dic[type];
         if (parent == null) FindCanvas();
-        GameObject ui = ABManager.GetInstance().LoadRes<GameObject>(type.bundleName, type.assetName);
-        //GameObject ui = GameObject.Instantiate(Resources.Load<GameObject>(type.Path), parent);
+        GameObject ui = GameObject.Instantiate(ABManager.GetInstance().LoadRes<GameObject>(type.bundleName, type.assetName),parent);
+        ABManager.GetInstance().UnLoad(type.bundleName);    
         ui.name = type.assetName;
         ui_Dic[type] = ui;
         return ui;

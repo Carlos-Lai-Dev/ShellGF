@@ -1,9 +1,6 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.UI;
-using static UnityEngine.UI.Button;
 
 public enum SoundName
 {
@@ -33,7 +30,8 @@ public static class SoundManager
         {
             [SoundName.PlayerMove] = 0f
         };
-        soundPrefab = Resources.Load<GameObject>("Prefabs/GameObject/Sound");
+        soundPrefab = ABManager.GetInstance().LoadRes<GameObject>("prefab", "Sound");
+        ABManager.GetInstance().UnLoad("prefab");
         SetBGM(SoundName.StartBGM);
     }
     public static void SetBGM(SoundName soundName)
@@ -167,6 +165,6 @@ public static class SoundManager
 #endif
         return null;
     }
-   
-    
+
+
 }
