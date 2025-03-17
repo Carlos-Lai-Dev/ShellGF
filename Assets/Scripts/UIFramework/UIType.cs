@@ -1,11 +1,11 @@
 public class UIType
 {
-    public string Name { get; private set; }
-    public string Path { get; private set; }
+    public string assetName { get; private set; }
+    public string bundleName { get; private set; }
 
-    public UIType(string path)
+    public UIType(string asset_Name, string AB_Name)
     {
-        Path = path;
-        Name = path.Substring(path.LastIndexOf('/') + 1);
+        assetName = asset_Name;
+        bundleName = AB_Name;
     }
 }

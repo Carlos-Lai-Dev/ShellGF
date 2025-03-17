@@ -1,7 +1,7 @@
 using System;
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class SceneController
@@ -10,7 +10,7 @@ public class SceneController
     private readonly Dictionary<string, SceneBase> scene_Dic;
     private static Action onLoaderCallback;
     private static AsyncOperation asyncOperation;
-    public static SceneController GetInstance() => instance = instance != null ? instance : new SceneController();
+    public static SceneController GetInstance() => instance != null ? instance : instance = new SceneController();
     private class LoadingMono : MonoBehaviour { }
     private SceneController()
     {

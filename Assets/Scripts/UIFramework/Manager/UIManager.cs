@@ -8,7 +8,7 @@ public class UIManager
 {
     private Transform parent;
     private static UIManager instance;
-    public static UIManager GetInstance() => instance = instance != null ? instance : new UIManager();
+    public static UIManager GetInstance() => instance != null ? instance : instance = new UIManager();
 
     private readonly Stack<BasePanel> ui_Stack;
     private readonly Dictionary<UIType, GameObject> ui_Dic;
@@ -64,21 +64,22 @@ public class UIManager
     {
         if (ui_Dic.ContainsKey(type)) return ui_Dic[type];
         if (parent == null) FindCanvas();
-        GameObject ui = GameObject.Instantiate(Resources.Load<GameObject>(type.Path), parent);
-        ui.name = type.Name;
+        GameObject ui = ABManager.GetInstance().LoadRes<GameObject>(type.bundleName, type.assetName);
+        //GameObject ui = GameObject.Instantiate(Resources.Load<GameObject>(type.Path), parent);
+        ui.name = type.assetName;
         ui_Dic[type] = ui;
         return ui;
     }
     public void OpenPanel(BasePanel panel)
     {
 #if UNITY_EDITOR
-        Debug.Log($"{panel.uiType.Name} Open !");
+        Debug.Log($"{panel.uiType.assetName} Open !");
 #endif
         if (ui_Stack.Count > 0) ui_Stack.Peek().OnDisable();
 
         panel.activeObject = GetSingleObject(panel.uiType);
 
-        if (ui_Stack.Count == 0 || (ui_Stack.Count != 0 && panel.uiType.Name != ui_Stack.Peek().uiType.Name))
+        if (ui_Stack.Count == 0 || (ui_Stack.Count != 0 && panel.uiType.assetName != ui_Stack.Peek().uiType.assetName))
         {
             ui_Stack.Push(panel);
             panel.OnEnter();
@@ -94,7 +95,7 @@ public class UIManager
             ui_Stack.Peek().OnDisable();
             ui_Stack.Peek().OnExit();
 #if UNITY_EDITOR
-            Debug.Log($"{ui_Stack.Peek().uiType.Name} Close !");
+            Debug.Log($"{ui_Stack.Peek().uiType.assetName} Close !");
 #endif
             GameObject.Destroy(ui_Dic[ui_Stack.Peek().uiType]);
             ui_Dic.Remove(ui_Stack.Peek().uiType);

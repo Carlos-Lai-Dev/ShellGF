@@ -1,4 +1,3 @@
-using UnityEngine;
 using UnityEngine.UI;
 
 public class StartPanel : BasePanel
@@ -6,8 +5,9 @@ public class StartPanel : BasePanel
     private Button startBtn;
     private Button optionsBtn;
     private Button quitBtn;
-    private static readonly string path = resource + PanelName.StartPanel.ToString();
-    public StartPanel() : base(new UIType(path))
+    private static readonly string bundleName = "ui";
+    private static readonly string assetName = PanelName.StartPanel.ToString();
+    public StartPanel() : base(new UIType(assetName, bundleName))
     {
     }
 

@@ -3,8 +3,10 @@ using UnityEngine.UI;
 public class GamePanel : BasePanel
 {
     private Button backBtn;
-    private static readonly string path = resource + PanelName.GamePanel.ToString();
-    public GamePanel() : base(new UIType(path))
+    private static readonly string bundleName = "ui";
+    private static readonly string assetName = PanelName.GamePanel.ToString();
+
+    public GamePanel() : base(new UIType(assetName, bundleName))
     {
     }
 

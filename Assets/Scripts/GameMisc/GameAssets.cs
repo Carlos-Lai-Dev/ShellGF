@@ -4,7 +4,7 @@ using UnityEngine;
 public class GameAssets : MonoBehaviour
 {
     private static GameAssets instance;
-    public static GameAssets Instance => instance = instance != null ? instance : Instantiate(Resources.Load<GameAssets>("Prefabs/GameAssets/GameAssets"));
+    public static GameAssets Instance => instance != null ? instance : instance = Instantiate(Resources.Load<GameAssets>("Prefabs/GameAssets/GameAssets"));
     public SoundAudioClip[] soundAudioClip_Arr;
 
     [Serializable]
