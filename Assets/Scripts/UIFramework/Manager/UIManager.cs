@@ -64,8 +64,7 @@ public class UIManager
     {
         if (ui_Dic.ContainsKey(type)) return ui_Dic[type];
         if (parent == null) FindCanvas();
-        GameObject ui = GameObject.Instantiate(ABManager.GetInstance().LoadRes<GameObject>(type.bundleName, type.assetName),parent);
-        ABManager.GetInstance().UnLoad(type.bundleName);    
+        GameObject ui = GameObject.Instantiate(ABManager.GetInstance().LoadRes<GameObject>(type.bundleName, type.assetName), parent);
         ui.name = type.assetName;
         ui_Dic[type] = ui;
         return ui;
@@ -109,7 +108,13 @@ public class UIManager
             {
                 ui_Stack.Peek().OnEnable();
             }
+
+            if (ui_Stack.Count == 0)
+            {
+                ABManager.GetInstance().UnLoad("ui", true);
+            }
         }
+       
 
     }
 

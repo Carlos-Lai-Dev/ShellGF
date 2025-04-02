@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 4125616813
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 907731b9faad7141213fcb9561eaf1db
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/CasualGameBGM05/BGM_02.wav
+- Assets/Casual Game Sounds U6/CasualGameSounds/Button.wav
+- Assets/CasualGameBGM05/BGM_03.wav
+Dependencies: []

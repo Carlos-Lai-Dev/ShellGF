@@ -1,0 +1,31 @@
+ManifestFileVersion: 0
+CRC: 990926969
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 89f1feb03e162e0b4247aff3417f550a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0caa945af38d220c18ad3201d4657dae
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: efc96f456ab197b4aa8cb4434dea5010, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: Assembly-CSharp
+  ClassName: AudioData
+- AssemblyName: Assembly-CSharp
+  ClassName: GameAssets/SoundAudioClip
+Assets:
+- Assets/Prefabs/GameAssets/GameAssets.prefab
+- Assets/Prefabs/GameObject/Sound.prefab
+Dependencies:
+- D:/UnityProjects/ShellGF/AssetBundles/StandaloneWindows/sound

@@ -30,6 +30,7 @@ public class SceneController
         UIManager.GetInstance().ClosePanel(true);
         onLoaderCallback = () =>
         {
+            Resources.UnloadUnusedAssets();
             GameObject loadingObject = new GameObject("LoadingObject");
             loadingObject.AddComponent<LoadingMono>().StartCoroutine(LoadSceneAsync(sceneNameStr));
             sceneBase.EnterScene();

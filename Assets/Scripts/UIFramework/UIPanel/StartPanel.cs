@@ -50,6 +50,7 @@ public class StartPanel : BasePanel
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
+        ABManager.GetInstance().UnLoadAllAssetBundles(true);
         Application.Quit();
 #endif
     }

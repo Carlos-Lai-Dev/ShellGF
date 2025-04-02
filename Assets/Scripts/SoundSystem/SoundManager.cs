@@ -31,7 +31,7 @@ public static class SoundManager
             [SoundName.PlayerMove] = 0f
         };
         soundPrefab = ABManager.GetInstance().LoadRes<GameObject>("prefab", "Sound");
-        ABManager.GetInstance().UnLoad("prefab");
+        
         SetBGM(SoundName.StartBGM);
     }
     public static void SetBGM(SoundName soundName)

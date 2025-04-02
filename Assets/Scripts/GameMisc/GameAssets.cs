@@ -17,7 +17,6 @@ public class GameAssets : MonoBehaviour
     {
         var gameObject = Instantiate(ABManager.GetInstance().LoadRes<GameObject>("prefab", "GameAssets"));
         var gameAssets = gameObject.GetComponent<GameAssets>();
-        ABManager.GetInstance().UnLoad("prefab");
         return gameAssets;
     } 
     private void Start()

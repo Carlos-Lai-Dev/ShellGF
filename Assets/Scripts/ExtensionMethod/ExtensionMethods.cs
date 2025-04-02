@@ -5,6 +5,20 @@ using UnityEngine.UI;
 
 public static class ExtensionMethods
 {
+    public static string FormatBytes(long bytes)
+    {
+        string[] suffixes = { "B", "KB", "MB", "GB" };
+        int i = 0;
+        double dblBytes = bytes;
+
+        while (dblBytes >= 1024 && i < suffixes.Length - 1)
+        {
+            dblBytes /= 1024;
+            i++;
+        }
+
+        return $"{dblBytes:0.##} {suffixes[i]}";
+    }
     /// <summary>
     /// 额外添加音频播放
     /// </summary>
