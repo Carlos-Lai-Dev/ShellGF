@@ -1,8 +1,8 @@
 using System;
-using UnityEngine;
-using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Events;
 
 enum ABStatus
 {
@@ -54,6 +54,7 @@ public class ABManager : SingletonMono<ABManager>
     {
         Queue<string> load_Queue = new Queue<string>();
         load_Queue.Enqueue(abName);
+
         for (; load_Queue.Count > 0; load_Queue.Dequeue())
         {
             string name = load_Queue.Peek();
@@ -61,11 +62,14 @@ public class ABManager : SingletonMono<ABManager>
             if (GetStatus(name) == ABStatus.Loading) UnLoad(name);
 
             assetBundle_Dic[name] = AssetBundle.LoadFromFile(basePath + name);
+
 #if UNITY_EDITOR
             if (assetBundle_Dic[name] == null)
             {
                 throw new ArgumentException($"AssetBundle: '{name}' load fail ! ");
             }
+            // 注册到监控系统
+            ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
 #endif
             SetStatus(name, ABStatus.Completed);
 
@@ -74,7 +78,9 @@ public class ABManager : SingletonMono<ABManager>
                 load_Queue.Enqueue(depend);
             }
 
+            ABReferenceManager.AddReference(name);
         }
+
     }
 
     public T LoadRes<T>(string abName, string resName) where T : UnityEngine.Object
@@ -132,12 +138,15 @@ public class ABManager : SingletonMono<ABManager>
             {
                 throw new ArgumentException($"AssetBundle '{name}' Load fail !");
             }
+            // 注册到监控系统
+            ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
 #endif
             SetStatus(name, ABStatus.Completed);
+            ABReferenceManager.AddReference(name);
         }
     }
 
-    private IEnumerator LoadResourcesAsync<T>(string abName, string resName, UnityAction<T> callBack = null) where T : UnityEngine.Object
+    private IEnumerator LoadResourcesAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : UnityEngine.Object
     {
         if (GetStatus(abName) != ABStatus.Completed) yield return StartCoroutine(LoadAssetBundleAsync(abName));
         AssetBundleRequest bundleRequest = assetBundle_Dic[abName].LoadAssetAsync<T>(resName);
@@ -148,7 +157,7 @@ public class ABManager : SingletonMono<ABManager>
 #endif
         callBack?.Invoke(res);
     }
-    public void LoadResAsync<T>(string abName, string resName, UnityAction<T> callBack = null) where T : UnityEngine.Object
+    public void LoadResAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : UnityEngine.Object
     {
         StartCoroutine(LoadResourcesAsync<T>(abName, resName, callBack));
     }

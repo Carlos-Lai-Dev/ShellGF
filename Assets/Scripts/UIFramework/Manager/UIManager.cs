@@ -109,10 +109,10 @@ public class UIManager
                 ui_Stack.Peek().OnEnable();
             }
 
-            if (ui_Stack.Count == 0)
+           /* if (ui_Stack.Count == 0)
             {
                 ABManager.GetInstance().UnLoad("ui", true);
-            }
+            }*/
         }
        
 
