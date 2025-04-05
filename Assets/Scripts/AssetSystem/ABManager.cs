@@ -35,6 +35,7 @@ public class ABManager : SingletonMono<ABManager>
     public void UnLoad(string abName, bool unLoadAllLoadedObjects = false)
     {
         if (!assetBundle_Dic.ContainsKey(abName) || assetBundle_Dic[abName] == null) return;
+
         assetBundle_Dic[abName].Unload(unLoadAllLoadedObjects);
 #if UNITY_EDITOR
         //Debug.Log($"AssetBunlde {abName} is Unloaded Success !");
@@ -168,7 +169,6 @@ public class ABManager : SingletonMono<ABManager>
             }
             AssetBundleCreateRequest bundleCreateRequest = AssetBundle.LoadFromFileAsync(basePath + name);
             SetStatus(name, ABStatus.Loading);
-            yield return bundleCreateRequest;
             assetBundle_Dic[name] = bundleCreateRequest.assetBundle;
 #if UNITY_EDITOR
             if (assetBundle_Dic[name] == null)
@@ -176,6 +176,7 @@ public class ABManager : SingletonMono<ABManager>
                 throw new ArgumentException($"AssetBundle '{name}' Load fail !");
             }
 #endif
+            yield return bundleCreateRequest;
             SetStatus(name, ABStatus.Completed);
 
 /*#if UNITY_EDITOR
