@@ -52,6 +52,7 @@ public class ABMemoryWatcher : MonoBehaviour
             {
                 ABManager.GetInstance().UnLoad(bundle.bundleName);
                 ABMemoryTracker._loadedBundles.Remove(bundle.bundleName);
+                ABReferenceManager.RemoveReference(bundle.bundleName);
             }
         }
         else
@@ -61,6 +62,7 @@ public class ABMemoryWatcher : MonoBehaviour
             {
                 ABManager.GetInstance().UnLoad(bundle.bundleName);
                 ABMemoryTracker._loadedBundles.Remove(bundle.bundleName);
+                ABReferenceManager.RemoveReference(bundle.bundleName);
             }
         }
     }

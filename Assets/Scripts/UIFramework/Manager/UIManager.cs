@@ -72,7 +72,7 @@ public class UIManager
     public void OpenPanel(BasePanel panel)
     {
 #if UNITY_EDITOR
-        Debug.Log($"{panel.uiType.assetName} Open !");
+        //Debug.Log($"{panel.uiType.assetName} Open !");
 #endif
         if (ui_Stack.Count > 0) ui_Stack.Peek().OnDisable();
 
@@ -94,12 +94,12 @@ public class UIManager
             ui_Stack.Peek().OnDisable();
             ui_Stack.Peek().OnExit();
 #if UNITY_EDITOR
-            Debug.Log($"{ui_Stack.Peek().uiType.assetName} Close !");
+            //Debug.Log($"{ui_Stack.Peek().uiType.assetName} Close !");
 #endif
             GameObject.Destroy(ui_Dic[ui_Stack.Peek().uiType]);
             ui_Dic.Remove(ui_Stack.Peek().uiType);
+            ABReferenceManager.ReleaseReference(ui_Stack.Peek().uiType.bundleName,true);
             ui_Stack.Pop();
-
             if (isEmpty)
             {
                 ClosePanel(isEmpty);
@@ -108,11 +108,6 @@ public class UIManager
             {
                 ui_Stack.Peek().OnEnable();
             }
-
-           /* if (ui_Stack.Count == 0)
-            {
-                ABManager.GetInstance().UnLoad("ui", true);
-            }*/
         }
        
 

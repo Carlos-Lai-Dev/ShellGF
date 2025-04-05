@@ -1,6 +1,6 @@
 using System;
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class ABReferenceManager : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class ABReferenceManager : MonoBehaviour
         }
     }
 
-    public static void ReleaseReference(string bundleName)
+    public static void ReleaseReference(string bundleName, bool unLoadAllLoadedObjects = false)
     {
         if (_referenceCounts.ContainsKey(bundleName))
         {
@@ -41,10 +41,15 @@ public class ABReferenceManager : MonoBehaviour
             // 引用计数为0时可以考虑卸载
             if (_referenceCounts[bundleName] <= 0)
             {
-                _referenceCounts.Remove(bundleName);
-                ABManager.GetInstance().UnLoad(bundleName);
+                RemoveReference(bundleName);
+                ABManager.GetInstance().UnLoad(bundleName, unLoadAllLoadedObjects);
                 ABMemoryTracker._loadedBundles.Remove(bundleName);
             }
         }
+    }
+
+    public static void RemoveReference(string bundleName)
+    {
+        _referenceCounts.Remove(bundleName);
     }
 }
