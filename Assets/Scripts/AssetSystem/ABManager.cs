@@ -31,7 +31,7 @@ public class ABManager : SingletonMono<ABManager>
         manifest = main_AB.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
         main_AB.Unload(false);
     }
-  
+
     public void UnLoad(string abName, bool unLoadAllLoadedObjects = false)
     {
         if (!assetBundle_Dic.ContainsKey(abName) || assetBundle_Dic[abName] == null) return;
@@ -62,51 +62,58 @@ public class ABManager : SingletonMono<ABManager>
         {
             string name = load_Queue.Peek();
 
-            if (GetStatus(name) == ABStatus.Completed) continue;
-
-            if (GetStatus(name) == ABStatus.Loading) UnLoad(name);
-
-            assetBundle_Dic[name] = AssetBundle.LoadFromFile(basePath + name);
-
-#if UNITY_EDITOR
-            if (assetBundle_Dic[name] == null)
+            if (GetStatus(name) == ABStatus.Completed)
             {
-                throw new ArgumentException($"AssetBundle: '{name}' load fail ! ");
+#if UNITY_EDITOR
+                // 注册到监控系统
+                ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
+#endif
+                ABReferenceManager.AddReference(name);
+                //continue;
             }
 
-#endif
-            SetStatus(name, ABStatus.Completed);
-
-#if UNITY_EDITOR
-            // 注册到监控系统
-            ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
-#endif
-            ABReferenceManager.AddReference(name);
+            if (GetStatus(name) == ABStatus.Loading) UnLoad(name);
 
             foreach (var depend in manifest.GetAllDependencies(name))
             {
                 load_Queue.Enqueue(depend);
             }
 
+            if (GetStatus(name) == ABStatus.Completed) continue;
+
+            assetBundle_Dic[name] = AssetBundle.LoadFromFile(basePath + name);
+#if UNITY_EDITOR
+            if (assetBundle_Dic[name] == null)
+            {
+                throw new ArgumentException($"AssetBundle: '{name}' load fail ! ");
+            }
+#endif
+            SetStatus(name, ABStatus.Completed);
+#if UNITY_EDITOR
+            // 注册到监控系统
+            ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
+#endif
+            ABReferenceManager.AddReference(name);
         }
 
     }
 
     public T LoadRes<T>(string abName, string resName) where T : UnityEngine.Object
     {
-        if (GetStatus(abName) == ABStatus.Completed)
-        {
-            ABReferenceManager.AddReference(abName);
+        LoadAssetBundle(abName);
+        /* if (GetStatus(abName) == ABStatus.Completed)
+         {
+             ABReferenceManager.AddReference(abName);
 
-            foreach (var depend in manifest.GetAllDependencies(abName))
-            {
-                ABReferenceManager.AddReference(depend);
-            }
-        }
-        else
-        {
-            LoadAssetBundle(abName);
-        }
+             foreach (var depend in manifest.GetAllDependencies(abName))
+             {
+                 ABReferenceManager.AddReference(depend);
+             }
+         }
+         else
+         {
+             LoadAssetBundle(abName);
+         }*/
         T res = assetBundle_Dic[abName].LoadAsset<T>(resName);
 
 #if UNITY_EDITOR
@@ -126,11 +133,7 @@ public class ABManager : SingletonMono<ABManager>
         while (load_Stack.Count > 0)
         {
             var (name, needAddDepends) = load_Stack.Peek();
-            if (GetStatus(name) == ABStatus.Completed)
-            {
-                load_Stack.Pop();
-                continue;
-            }
+           
 
             if (GetStatus(name) == ABStatus.Loading)
             {
@@ -151,6 +154,18 @@ public class ABManager : SingletonMono<ABManager>
                 }
                 continue;
             }
+
+            if (GetStatus(name) == ABStatus.Completed)
+            {
+                
+#if UNITY_EDITOR
+                // 注册到监控系统
+                ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
+#endif
+                ABReferenceManager.AddReference(name);
+                load_Stack.Pop();
+                continue;
+            }
             AssetBundleCreateRequest bundleCreateRequest = AssetBundle.LoadFromFileAsync(basePath + name);
             SetStatus(name, ABStatus.Loading);
             yield return bundleCreateRequest;
@@ -163,17 +178,18 @@ public class ABManager : SingletonMono<ABManager>
 #endif
             SetStatus(name, ABStatus.Completed);
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
             // 注册到监控系统
             ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
 #endif
-            ABReferenceManager.AddReference(name);
+            ABReferenceManager.AddReference(name);*/
         }
     }
 
     private IEnumerator LoadResourcesAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : UnityEngine.Object
     {
-        if (GetStatus(abName) == ABStatus.Completed)
+        yield return StartCoroutine(LoadAssetBundleAsync(abName));
+        /*if (GetStatus(abName) == ABStatus.Completed)
         {
             ABReferenceManager.AddReference(abName);
 
@@ -185,7 +201,7 @@ public class ABManager : SingletonMono<ABManager>
         else
         {
             yield return StartCoroutine(LoadAssetBundleAsync(abName));
-        }
+        }*/
         AssetBundleRequest bundleRequest = assetBundle_Dic[abName].LoadAssetAsync<T>(resName);
         yield return bundleRequest;
         T res = bundleRequest.asset as T;
