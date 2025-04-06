@@ -1,6 +1,6 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public enum SoundName
 {
@@ -30,10 +30,15 @@ public static class SoundManager
         {
             [SoundName.PlayerMove] = 0f
         };
-        soundPrefab = ABManager.GetInstance().LoadRes<GameObject>("prefab", "Sound");
-        
+        ABManager.GetInstance().LoadResAsync<GameObject>(ABName.prefab, "Sound", (go) =>
+        {
+            soundPrefab = go;
+            ABReferenceManager.ReleaseReference(ABName.prefab);
+        });
+
         SetBGM(SoundName.StartBGM);
     }
+   
     public static void SetBGM(SoundName soundName)
     {
         if (BGM_GO == null)

@@ -1,13 +1,12 @@
-using UnityEngine;
+using UnityEngine; //宏引用不能取消
 using UnityEngine.UI;
 public class StartPanel : BasePanel
 {
     private Button startBtn;
     private Button optionsBtn;
     private Button quitBtn;
-    private static readonly string bundleName = "ui";
     private static readonly string assetName = PanelName.StartPanel.ToString();
-    public StartPanel() : base(new UIType(assetName, bundleName))
+    public StartPanel() : base(new UIType(assetName))
     {
     }
 

@@ -3,9 +3,8 @@ using UnityEngine.UI;
 public class SettingsPanel : BasePanel
 {
     private Button closeBtn;
-    private static readonly string bundleName = "ui";
     private static readonly string assetName = PanelName.SettingsPanel.ToString();
-    public SettingsPanel() : base(new UIType(assetName,bundleName))
+    public SettingsPanel() : base(new UIType(assetName))
     {
     }
 

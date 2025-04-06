@@ -8,6 +8,7 @@ public class ABReferenceManager : MonoBehaviour
 
     public static void AddReference(string bundleName)
     {
+
         if (_referenceCounts.ContainsKey(bundleName))
         {
             _referenceCounts[bundleName]++;
@@ -25,29 +26,46 @@ public class ABReferenceManager : MonoBehaviour
         }
     }
 
-    public static void ReleaseReference(string bundleName, bool unLoadAllLoadedObjects = false)
+    private static void ReleaseReference(string bundleName, bool unLoadAllLoadedObjects)
     {
         if (_referenceCounts.ContainsKey(bundleName))
         {
-            _referenceCounts[bundleName]--;
+            Queue<string> load_Queue = new Queue<string>();
+            load_Queue.Enqueue(bundleName);
 
-            // 更新内存监控信息
-            if (ABMemoryTracker._loadedBundles.TryGetValue(bundleName, out var info))
+            for (; load_Queue.Count > 0; load_Queue.Dequeue())
             {
-                info.referenceCount = _referenceCounts[bundleName];
-                info.lastAccessTime = DateTime.Now;
+                string name = load_Queue.Peek();
+                _referenceCounts[name]--;
+
+                foreach (var depend in ABManager.manifest.GetAllDependencies(name))
+                {
+                    load_Queue.Enqueue(depend);
+                }
+                // 更新内存监控信息
+                if (ABMemoryTracker._loadedBundles.TryGetValue(name, out var info))
+                {
+                    info.referenceCount = _referenceCounts[name];
+                    info.lastAccessTime = DateTime.Now;
+                }
+
+                // 引用计数为0时可以考虑卸载
+                if (_referenceCounts[name] <= 0)
+                {
+                    RemoveReference(name);
+                    ABManager.GetInstance().UnLoad(name, unLoadAllLoadedObjects);
+                    ABMemoryTracker._loadedBundles.Remove(name);
+                }
             }
 
-            // 引用计数为0时可以考虑卸载
-            if (_referenceCounts[bundleName] <= 0)
-            {
-                RemoveReference(bundleName);
-                ABManager.GetInstance().UnLoad(bundleName, unLoadAllLoadedObjects);
-                ABMemoryTracker._loadedBundles.Remove(bundleName);
-            }
+
+
         }
     }
-
+    public static void ReleaseReference(ABName bundleName, bool unLoadAllLoadedObjects = false)
+    {
+        ReleaseReference(bundleName.ToString(), unLoadAllLoadedObjects);
+    }
     public static void RemoveReference(string bundleName)
     {
         _referenceCounts.Remove(bundleName);

@@ -10,6 +10,12 @@ enum ABStatus
     Loading,
     NotLoaded,
 }
+public enum ABName
+{ 
+    ui,
+    prefab,
+    sound,
+}
 public class ABManager : SingletonMono<ABManager>
 {
     private static readonly string basePath = Application.streamingAssetsPath + '/';
@@ -21,7 +27,7 @@ public class ABManager : SingletonMono<ABManager>
 #elif UNITY_STANDALONE_WIN
              "Windows";
 #endif
-    private AssetBundleManifest manifest;
+    public static AssetBundleManifest manifest;
     private readonly Dictionary<string, AssetBundle> assetBundle_Dic = new Dictionary<string, AssetBundle>();
     private readonly Dictionary<string, ABStatus> loadStatus_Dic = new Dictionary<string, ABStatus>();
 
@@ -99,28 +105,17 @@ public class ABManager : SingletonMono<ABManager>
 
     }
 
-    public T LoadRes<T>(string abName, string resName) where T : UnityEngine.Object
+    public T LoadRes<T>(ABName abName, string resName) where T : UnityEngine.Object
     {
-        LoadAssetBundle(abName);
-        /* if (GetStatus(abName) == ABStatus.Completed)
-         {
-             ABReferenceManager.AddReference(abName);
+        string name = abName.ToString();
+        LoadAssetBundle(name);
 
-             foreach (var depend in manifest.GetAllDependencies(abName))
-             {
-                 ABReferenceManager.AddReference(depend);
-             }
-         }
-         else
-         {
-             LoadAssetBundle(abName);
-         }*/
-        T res = assetBundle_Dic[abName].LoadAsset<T>(resName);
+        T res = assetBundle_Dic[name].LoadAsset<T>(resName);
 
 #if UNITY_EDITOR
         if (res == null)
         {
-            throw new ArgumentException($"'{resName}' In AssetBundle '{abName}' Can't found !");
+            throw new ArgumentException($"'{resName}' In AssetBundle '{name}' Can't found !");
         }
 #endif
         return res;
@@ -134,7 +129,7 @@ public class ABManager : SingletonMono<ABManager>
         while (load_Stack.Count > 0)
         {
             var (name, needAddDepends) = load_Stack.Peek();
-           
+
 
             if (GetStatus(name) == ABStatus.Loading)
             {
@@ -158,7 +153,7 @@ public class ABManager : SingletonMono<ABManager>
 
             if (GetStatus(name) == ABStatus.Completed)
             {
-                
+
 #if UNITY_EDITOR
                 // 注册到监控系统
                 ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
@@ -179,30 +174,14 @@ public class ABManager : SingletonMono<ABManager>
             yield return bundleCreateRequest;
             SetStatus(name, ABStatus.Completed);
 
-/*#if UNITY_EDITOR
-            // 注册到监控系统
-            ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
-#endif
-            ABReferenceManager.AddReference(name);*/
+
         }
     }
 
     private IEnumerator LoadResourcesAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : UnityEngine.Object
     {
         yield return StartCoroutine(LoadAssetBundleAsync(abName));
-        /*if (GetStatus(abName) == ABStatus.Completed)
-        {
-            ABReferenceManager.AddReference(abName);
 
-            foreach (var depend in manifest.GetAllDependencies(abName))
-            {
-                ABReferenceManager.AddReference(depend);
-            }
-        }
-        else
-        {
-            yield return StartCoroutine(LoadAssetBundleAsync(abName));
-        }*/
         AssetBundleRequest bundleRequest = assetBundle_Dic[abName].LoadAssetAsync<T>(resName);
         yield return bundleRequest;
         T res = bundleRequest.asset as T;
@@ -211,9 +190,10 @@ public class ABManager : SingletonMono<ABManager>
 #endif
         callBack?.Invoke(res);
     }
-    public void LoadResAsync<T>(string abName, string resName, UnityAction<T> callBack) where T : UnityEngine.Object
+
+    public void LoadResAsync<T>(ABName abName, string resName, UnityAction<T> callBack) where T : UnityEngine.Object
     {
-        StartCoroutine(LoadResourcesAsync<T>(abName, resName, callBack));
+        StartCoroutine(LoadResourcesAsync<T>(abName.ToString(), resName, callBack));
     }
 
 }
