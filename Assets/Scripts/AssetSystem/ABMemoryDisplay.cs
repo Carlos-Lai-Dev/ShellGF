@@ -3,7 +3,13 @@ using UnityEngine;
 
 public class ABMemoryDisplay : MonoBehaviour
 {
-    public bool showOnScreen = true;
+    public bool showOnScreen =
+#if UNITY_EDITOR
+    true;
+#else
+    false;
+#endif
+
     public Rect displayRect = new Rect(10, 10, 300, 200);
     public Color textColor = Color.white;
     public int fontSize = 14;
