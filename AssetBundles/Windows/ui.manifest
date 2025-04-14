@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2276340446
+CRC: 1784888795
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: e8211d79486fbccb555e3a4caa179cf0
+    Hash: 021aa64895fcb99ff2604903bd0a6ffa
   TypeTreeHash:
     serializedVersion: 2
     Hash: 56d4d6e5e8044c98b6e8e6051bda0e16
@@ -51,7 +51,7 @@ SerializeReferenceClassIdentifiers:
 - AssemblyName: UnityEngine.UI
   ClassName: UnityEngine.UI.SpriteState
 Assets:
-- Assets/Resources/Prefabs/UI/Panel/SettingsPanel.prefab
-- Assets/Resources/Prefabs/UI/Panel/StartPanel.prefab
-- Assets/Resources/Prefabs/UI/Panel/GamePanel.prefab
+- Assets/Prefabs/UI/Panel/SettingsPanel.prefab
+- Assets/Prefabs/UI/Panel/StartPanel.prefab
+- Assets/Prefabs/UI/Panel/GamePanel.prefab
 Dependencies: []

@@ -15,7 +15,7 @@ public class GameAssets : MonoBehaviour
     }
     private static GameAssets GetGameRoot()
     {
-        var gameObject = Instantiate(ABManager.GetInstance().LoadRes<GameObject>(ABName.prefab, "GameAssets"));
+        var gameObject = Instantiate(ABManager.GetInstance().LoadRes<GameObject>(ABName.gameasset, "GameAssets"));
         var gameAssets = gameObject.GetComponent<GameAssets>();
         return gameAssets;
     } 

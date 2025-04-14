@@ -62,7 +62,7 @@ public class ABReferenceManager : MonoBehaviour
 
         }
     }
-    public static void ReleaseReference(ABName bundleName, bool unLoadAllLoadedObjects = false)
+    public static void ReleaseReference(ABName bundleName, bool unLoadAllLoadedObjects)
     {
         ReleaseReference(bundleName.ToString(), unLoadAllLoadedObjects);
     }

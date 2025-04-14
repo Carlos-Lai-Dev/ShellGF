@@ -13,8 +13,8 @@ enum ABStatus
 public enum ABName
 { 
     ui,
-    prefab,
-    sound,
+    pool,
+    gameasset,
 }
 public class ABManager : SingletonMono<ABManager>
 {
@@ -38,7 +38,7 @@ public class ABManager : SingletonMono<ABManager>
         main_AB.Unload(false);
     }
 
-    public void UnLoad(string abName, bool unLoadAllLoadedObjects = false)
+    public void UnLoad(string abName, bool unLoadAllLoadedObjects=true)
     {
         if (!assetBundle_Dic.ContainsKey(abName) || assetBundle_Dic[abName] == null) return;
 
@@ -50,7 +50,7 @@ public class ABManager : SingletonMono<ABManager>
         loadStatus_Dic.Remove(abName);
     }
 
-    public void UnLoadAllAssetBundles(bool unLoadAllLoadedObjects = false)
+    public void UnLoadAllAssetBundles(bool unLoadAllLoadedObjects)
     {
         assetBundle_Dic.Clear();
         loadStatus_Dic.Clear();

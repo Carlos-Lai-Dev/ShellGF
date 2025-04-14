@@ -1,14 +1,13 @@
 ManifestFileVersion: 0
-CRC: 288839973
+CRC: 1834539794
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: ui
       Dependencies: {}
     Info_1:
-      Name: sound
+      Name: gameasset
       Dependencies: {}
     Info_2:
-      Name: prefab
-      Dependencies:
-        Dependency_0: sound
+      Name: pool
+      Dependencies: {}

@@ -24,7 +24,6 @@ public class GameRoot : SingletonMono<GameRoot>
         SoundManager.Init();
         gameObject.AddComponent<ABMemoryDisplay>();
         gameObject.AddComponent<ABMemoryTracker>();
-        gameObject.AddComponent<ABMemoryWatcher>();
         gameObject.AddComponent<ABReferenceManager>();
     }
     private void Start()

@@ -18,21 +18,15 @@ public class ABMemoryMonitorWindow : EditorWindow
     {
         GUILayout.Label("AssetBundle Memory Usage", EditorStyles.boldLabel);
 
-        // 总内存统计
-        long totalMemory = ABMemoryTracker._loadedBundles.Values.Sum(b => b.memorySize);
-        EditorGUILayout.HelpBox($"Total AB Memory: {ExtensionMethods.FormatBytes(totalMemory)}", MessageType.Info);
-
         // 列表显示
         _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
 
-        foreach (var bundle in ABMemoryTracker._loadedBundles.Values
-            .OrderByDescending(b => b.memorySize))
+        foreach (var bundle in ABMemoryTracker._loadedBundles.Values)
         {
             EditorGUILayout.BeginHorizontal();
 
             // 显示基本信息
             EditorGUILayout.LabelField(bundle.bundleName, GUILayout.Width(200));
-            EditorGUILayout.LabelField(ExtensionMethods.FormatBytes(bundle.memorySize), GUILayout.Width(100));
             EditorGUILayout.LabelField(bundle.referenceCount.ToString(), GUILayout.Width(50));
 
             // 显示/隐藏详情按钮

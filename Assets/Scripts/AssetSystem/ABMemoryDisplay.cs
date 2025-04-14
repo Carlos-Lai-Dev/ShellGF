@@ -30,15 +30,11 @@ public class ABMemoryDisplay : MonoBehaviour
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         sb.AppendLine("== AssetBundle Memory ==");
 
-        long total = 0;
-        foreach (var bundle in ABMemoryTracker._loadedBundles.Values
-            .OrderByDescending(b => b.memorySize))
+        foreach (var bundle in ABMemoryTracker._loadedBundles.Values)
         {
-            sb.AppendLine($"{bundle.bundleName}: {ExtensionMethods.FormatBytes(bundle.memorySize)} (Ref: {bundle.referenceCount})");
-            total += bundle.memorySize;
+            sb.AppendLine($"{bundle.bundleName}: (Ref: {bundle.referenceCount})");
         }
 
-        sb.AppendLine($"Total: {ExtensionMethods.FormatBytes(total)}");
         sb.AppendLine($"Loaded Bundles: {ABMemoryTracker._loadedBundles.Count}");
 
         return sb.ToString();

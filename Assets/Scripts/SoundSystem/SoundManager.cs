@@ -19,7 +19,7 @@ public static class SoundManager
     private static AudioSource oneShot_AS;
     private static GameObject BGM_GO;
     private static AudioSource BGM_AS;
-    private static GameObject soundPrefab;
+    private static GameObject soundPrefab = null;
     private readonly static float min_Volume = 0.9f;
     private readonly static float max_Volume = 1.1f;
     private static Dictionary<SoundName, float> soundTimer_Dic;
@@ -30,15 +30,14 @@ public static class SoundManager
         {
             [SoundName.PlayerMove] = 0f
         };
-        ABManager.GetInstance().LoadResAsync<GameObject>(ABName.prefab, "Sound", (go) =>
+        ABManager.GetInstance().LoadResAsync<GameObject>(ABName.pool, "Sound", (go) =>
         {
             soundPrefab = go;
-            ABReferenceManager.ReleaseReference(ABName.prefab);
         });
 
         SetBGM(SoundName.StartBGM);
     }
-   
+
     public static void SetBGM(SoundName soundName)
     {
         if (BGM_GO == null)
