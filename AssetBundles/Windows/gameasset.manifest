@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 1026305573
+CRC: 877538726
 Hashes:
   AssetFileHash:
     serializedVersion: 2
     Hash: 6fc7dec5fb69495925d71e4db597fc6f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 0caa945af38d220c18ad3201d4657dae
+    Hash: 60a18584464e6cafe0a52bc658dc61fa
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -20,10 +20,10 @@ ClassTypes:
 - Class: 115
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers:
-- AssemblyName: Assembly-CSharp
-  ClassName: AudioData
-- AssemblyName: Assembly-CSharp
-  ClassName: GameAssets/SoundAudioClip
+- AssemblyName: ShellGF
+  ClassName: ShellGF.AudioData
+- AssemblyName: ShellGF
+  ClassName: ShellGF.GameAssets/SoundAudioClip
 Assets:
 - Assets/Prefabs/GameAssets/GameAssets.prefab
 - Assets/CasualGameBGM05/BGM_02.wav

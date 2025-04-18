@@ -1,0 +1,16 @@
+{
+    "name": "ShellGF.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f04a04193af5b3b4193b702e22548ac4"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
