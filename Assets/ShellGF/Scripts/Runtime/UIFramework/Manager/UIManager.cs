@@ -55,7 +55,7 @@ namespace ShellGF.Runtime
             catch (Exception e)
             {
 #if UNITY_EDITOR
-                Debug.LogWarning(e);
+                Debug.LogWarning($"Find Canvas Failed ! : {e}");
 #endif
             }
 

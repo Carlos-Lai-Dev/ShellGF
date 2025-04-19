@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.SceneManagement;
 
 namespace ShellGF.Runtime
 {
@@ -19,7 +18,6 @@ namespace ShellGF.Runtime
         ui,
         pool,
         gameasset,
-        scene,
     }
     public class ABManager : SingletonMono<ABManager>
     {
@@ -81,7 +79,6 @@ namespace ShellGF.Runtime
                     ABMemoryTracker.RegisterBundleLoad(assetBundle_Dic[name], name);
 #endif
                     ABReferenceManager.AddReference(name);
-                    //continue;
                 }
 
                 if (GetStatus(name) == ABStatus.Loading) UnLoad(name);
@@ -200,31 +197,6 @@ namespace ShellGF.Runtime
             StartCoroutine(LoadResourcesAsync<T>(abName.ToString(), resName, callBack));
         }
 
-       /* private IEnumerator LoadABAsync(string abName, string sceneName)
-        {
-            yield return StartCoroutine(LoadAssetBundleAsync(abName));
-
-            if (GetStatus(abName) == ABStatus.Completed)
-            {
-                var sceneLoadRequest = SceneManager.LoadSceneAsync(sceneName);
-                yield return sceneLoadRequest;
-
-                if (sceneLoadRequest.isDone)
-                {
-                    // 获取加载的场景
-                    Scene loadedScene = SceneManager.GetSceneByName(sceneName);
-
-                    // 跳转到加载完成的场景
-                    SceneManager.SetActiveScene(loadedScene);
-                }
-
-            }
-
-        }
-        public void LoadScene(ABName abName, SceneName sceneName)
-        {
-            StartCoroutine(LoadABAsync(abName.ToString(), sceneName.ToString()));
-        }*/
     }
 }
 
