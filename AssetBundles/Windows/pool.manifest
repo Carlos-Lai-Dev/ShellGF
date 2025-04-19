@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 312196124
+CRC: 4214115336
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cfac5ed38097dcfc1ed1b6cdc309afc9
+    Hash: 35755c21f64fbce2652af9e51d4b7f8f
   TypeTreeHash:
     serializedVersion: 2
     Hash: 27295f96fcdc2b917bd061e8817c7e02
@@ -15,5 +15,5 @@ ClassTypes:
   Script: {instanceID: 0}
 SerializeReferenceClassIdentifiers: []
 Assets:
-- Assets/Prefabs/GameObject/Sound.prefab
+- Assets/GamePlay/Prefabs/GameObject/Sound.prefab
 Dependencies: []
